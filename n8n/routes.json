@@ -1,0 +1,162 @@
+{
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "fabe36b4-de9b-4c57-b6c0-a6fc9db889db",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -48,
+          -112
+        ],
+        "id": "f2fd7d5e-ccd0-4d38-a1bb-accf4470c622",
+        "name": "Agents Webhook",
+        "webhookId": "fabe36b4-de9b-4c57-b6c0-a6fc9db889db"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "ce86d17e-3569-4a29-99f8-0ea58bc5ad11",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -48,
+          -336
+        ],
+        "id": "0e3d128a-f416-41a9-96a6-01aee962801d",
+        "name": "Companies Webhook",
+        "webhookId": "ce86d17e-3569-4a29-99f8-0ea58bc5ad11"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "b83dab76-8bcc-48a9-bf66-1e7d883d84d8",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -48,
+          336
+        ],
+        "id": "be5154bd-c5ff-465a-8e83-2b98841724ef",
+        "name": "Documents Webhook",
+        "webhookId": "b83dab76-8bcc-48a9-bf66-1e7d883d84d8"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "0c555736-1420-4dc0-9b86-5a29f78f924a",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -48,
+          112
+        ],
+        "id": "e3f2a734-d602-49fa-ad5e-568aee622312",
+        "name": "Tools Webhook",
+        "webhookId": "0c555736-1420-4dc0-9b86-5a29f78f924a"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          176,
+          -336
+        ],
+        "id": "41046d74-a89c-49bf-bbb2-f2ff786d1399",
+        "name": "TODO: Process Companies Data"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          176,
+          -112
+        ],
+        "id": "2a1186ad-d399-4f0a-9b32-357ddd4e08c5",
+        "name": "TODO: Process Agents Data"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          176,
+          112
+        ],
+        "id": "d95dcb2a-a2f0-42a0-8d7a-d91276a0216a",
+        "name": "TODO: Process Tools Data"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          176,
+          336
+        ],
+        "id": "df1054d1-5ecd-46b5-9d75-2594786d69c2",
+        "name": "TODO: Process Documents Data"
+      }
+    ],
+    "connections": {
+      "Agents Webhook": {
+        "main": [
+          [
+            {
+              "node": "TODO: Process Agents Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Companies Webhook": {
+        "main": [
+          [
+            {
+              "node": "TODO: Process Companies Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Documents Webhook": {
+        "main": [
+          [
+            {
+              "node": "TODO: Process Documents Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Tools Webhook": {
+        "main": [
+          [
+            {
+              "node": "TODO: Process Tools Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "pinData": {},
+    "meta": {
+      "instanceId": "fba4ec510b187b465eb107fafff437a62559efcb652da00e7095f49185b0b3b5"
+    }
+  }
