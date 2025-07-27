@@ -19,11 +19,13 @@ export const Documents: CollectionConfig = {
       options: ['Text', 'File'],
     },
     {
+      label: 'Content (Coming soon)',
       name: 'content',
       type: 'richText',
       admin: {
         condition: data => data.type === 'Text',
-      }
+        readOnly: true
+      },
     },
     {
       name: 'file',

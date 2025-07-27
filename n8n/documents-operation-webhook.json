@@ -1,0 +1,331 @@
+{
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "b83dab76-8bcc-48a9-bf66-1e7d883d84d8",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -48,
+          -128
+        ],
+        "id": "7d1051da-72b9-49f5-b758-ad0de5550618",
+        "name": "Documents Webhook",
+        "webhookId": "b83dab76-8bcc-48a9-bf66-1e7d883d84d8"
+      },
+      {
+        "parameters": {
+          "mode": "raw",
+          "jsonOutput": "={{ $json.body }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          176,
+          -128
+        ],
+        "id": "37120e21-c647-404a-9349-45d66c5a380b",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "url": "https://adaptasiai.com/api/media/6885b38e77ab3ca5fb6923de",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          848,
+          -128
+        ],
+        "id": "08f759dd-5ebd-4058-8daa-7ab335017eee",
+        "name": "Get Media"
+      },
+      {
+        "parameters": {
+          "url": "=https://adaptasiai.com{{ $json.url }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1072,
+          -128
+        ],
+        "id": "b7ade0f4-a79e-428d-a409-be2b1c4807f8",
+        "name": "Download Media"
+      },
+      {
+        "parameters": {
+          "options": {
+            "dimensions": 1536
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+        "typeVersion": 1.2,
+        "position": [
+          1328,
+          96
+        ],
+        "id": "bd584d0e-deb6-40b2-8cfb-fae27adcee1d",
+        "name": "small",
+        "credentials": {
+          "openAiApi": {
+            "id": "MjzHH03MmS3fKJwW",
+            "name": "OpenAI - diobresindo@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {
+            "metadata": {
+              "metadataValues": [
+                {
+                  "name": "company",
+                  "value": "adaptasiai"
+                },
+                {
+                  "name": "document_id",
+                  "value": "={{ $('Edit Fields').item.json.result.id }}"
+                }
+              ]
+            }
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+        "typeVersion": 1.1,
+        "position": [
+          1456,
+          96
+        ],
+        "id": "fc06ae93-de78-478d-922d-29ebbe051e7f",
+        "name": "default"
+      },
+      {
+        "parameters": {
+          "mode": "insert",
+          "qdrantCollection": {
+            "__rl": true,
+            "value": "adaptasiai",
+            "mode": "list",
+            "cachedResultName": "adaptasiai"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+        "typeVersion": 1.3,
+        "position": [
+          1296,
+          -128
+        ],
+        "id": "0eb91ee8-4c55-4770-9601-8976d2b8c259",
+        "name": "Qdrant Vector Store",
+        "credentials": {
+          "qdrantApi": {
+            "id": "RSRtGrdRz2bBZ0th",
+            "name": "QdrantApi"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $('Edit Fields').item.json.operation }}",
+                      "rightValue": "create",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "d2330478-dfc7-44a2-9a71-204971f29ba7"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "create"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "7a3d5d5e-aa19-4963-bfe2-f262c269359a",
+                      "leftValue": "={{ $('Edit Fields').item.json.operation }}",
+                      "rightValue": "updateByID",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "updateByID"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          400,
+          -128
+        ],
+        "id": "9f03fb14-045a-46f5-8805-2e8eea42e7ec",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "resource": "point",
+          "operation": "deletePoints",
+          "collectionName": {
+            "__rl": true,
+            "value": "adaptasiai",
+            "mode": "list",
+            "cachedResultName": "adaptasiai"
+          },
+          "filter": "={\n    \"must\": [\n      {\n          \"key\": \"metadata.document_id\",\n          \"match\": { \"value\": \"{{ $('Edit Fields').item.json.result.id }}\" }\n        }\n    ]\n  }",
+          "requestOptions": {}
+        },
+        "type": "n8n-nodes-qdrant.qdrant",
+        "typeVersion": 1,
+        "position": [
+          624,
+          -64
+        ],
+        "id": "567cf242-c91e-48f4-a26e-b946b2ca05b1",
+        "name": "Delete Points",
+        "credentials": {
+          "qdrantRestApi": {
+            "id": "ku1xkwvJAilvBIuu",
+            "name": "Qdrant"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Documents Webhook": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Media": {
+        "main": [
+          [
+            {
+              "node": "Download Media",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Download Media": {
+        "main": [
+          [
+            {
+              "node": "Qdrant Vector Store",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "small": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Qdrant Vector Store",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "default": {
+        "ai_document": [
+          [
+            {
+              "node": "Qdrant Vector Store",
+              "type": "ai_document",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Get Media",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Delete Points",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Delete Points": {
+        "main": [
+          [
+            {
+              "node": "Get Media",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "pinData": {},
+    "meta": {
+      "instanceId": "fba4ec510b187b465eb107fafff437a62559efcb652da00e7095f49185b0b3b5"
+    }
+  }
