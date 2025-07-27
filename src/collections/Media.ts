@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { afterOperationHook } from '@/hooks/after-operation-hook'
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -13,4 +14,7 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: true,
+  hooks: {
+    afterOperation: [afterOperationHook]
+  }
 }

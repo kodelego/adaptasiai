@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { afterOperationHook } from '@/hooks/after-operation-hook'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -10,4 +11,7 @@ export const Users: CollectionConfig = {
     // Email added by default
     // Add more fields as needed
   ],
+  hooks: {
+    afterOperation: [afterOperationHook]
+  }
 }

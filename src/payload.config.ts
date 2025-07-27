@@ -9,6 +9,12 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { Agents } from '@/collections/Agents'
+import { Tools } from '@/collections/Tools'
+import { Documents } from '@/collections/Documents'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import { Companies } from '@/collections/Companies'
+import { Webhooks } from '@/globals/Webhooks'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -20,7 +26,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media],
+  collections: [Agents, Tools, Documents, Users, Media, Companies],
+  globals: [Webhooks],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -32,6 +39,17 @@ export default buildConfig({
   sharp,
   plugins: [
     payloadCloudPlugin(),
-    // storage-adapter-placeholder
   ],
+  email: nodemailerAdapter({
+    defaultFromAddress: 'noreply@adaptasiai.com',
+    defaultFromName: 'AdaptasiAI',
+    transportOptions: {
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+      }
+    }
+  }),
 })
