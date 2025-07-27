@@ -15,6 +15,7 @@ import { Documents } from '@/collections/Documents'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { Companies } from '@/collections/Companies'
 import { Webhooks } from '@/globals/Webhooks'
+import { s3Storage } from '@payloadcms/storage-s3'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -39,6 +40,20 @@ export default buildConfig({
   sharp,
   plugins: [
     payloadCloudPlugin(),
+    s3Storage({
+      collections: {
+        media: true,
+      },
+      bucket: process.env.S3_BUCKET!,
+      config: {
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID!,
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY!,
+        },
+        region: process.env.S3_REGION,
+        endpoint: process.env.S3_ENDPOINT,
+      },
+    }),
   ],
   email: nodemailerAdapter({
     defaultFromAddress: 'noreply@adaptasiai.com',
