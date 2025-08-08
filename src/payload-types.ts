@@ -63,7 +63,6 @@ export type SupportedTimezones =
 
 export interface Config {
   auth: {
-    'third-party-access': ThirdPartyAccessAuthOperations;
     users: UserAuthOperations;
   };
   blocks: {};
@@ -73,7 +72,6 @@ export interface Config {
     documents: Document;
     'logo-animations': LogoAnimation;
     media: Media;
-    'third-party-access': ThirdPartyAccess;
     tools: Tool;
     users: User;
     'payload-locked-documents': PayloadLockedDocument;
@@ -87,7 +85,6 @@ export interface Config {
     documents: DocumentsSelect<false> | DocumentsSelect<true>;
     'logo-animations': LogoAnimationsSelect<false> | LogoAnimationsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    'third-party-access': ThirdPartyAccessSelect<false> | ThirdPartyAccessSelect<true>;
     tools: ToolsSelect<false> | ToolsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -106,34 +103,12 @@ export interface Config {
     'logo-animation-webhooks': LogoAnimationWebhooksSelect<false> | LogoAnimationWebhooksSelect<true>;
   };
   locale: null;
-  user:
-    | (ThirdPartyAccess & {
-        collection: 'third-party-access';
-      })
-    | (User & {
-        collection: 'users';
-      });
+  user: User & {
+    collection: 'users';
+  };
   jobs: {
     tasks: unknown;
     workflows: unknown;
-  };
-}
-export interface ThirdPartyAccessAuthOperations {
-  forgotPassword: {
-    email: string;
-    password: string;
-  };
-  login: {
-    email: string;
-    password: string;
-  };
-  registerFirstUser: {
-    email: string;
-    password: string;
-  };
-  unlock: {
-    email: string;
-    password: string;
   };
 }
 export interface UserAuthOperations {
@@ -299,33 +274,6 @@ export interface LogoAnimation {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "third-party-access".
- */
-export interface ThirdPartyAccess {
-  id: string;
-  updatedAt: string;
-  createdAt: string;
-  enableAPIKey?: boolean | null;
-  apiKey?: string | null;
-  apiKeyIndex?: string | null;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -344,13 +292,6 @@ export interface User {
   hash?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
   password?: string | null;
 }
 /**
@@ -381,10 +322,6 @@ export interface PayloadLockedDocument {
         value: string | Media;
       } | null)
     | ({
-        relationTo: 'third-party-access';
-        value: string | ThirdPartyAccess;
-      } | null)
-    | ({
         relationTo: 'tools';
         value: string | Tool;
       } | null)
@@ -393,15 +330,10 @@ export interface PayloadLockedDocument {
         value: string | User;
       } | null);
   globalSlug?: string | null;
-  user:
-    | {
-        relationTo: 'third-party-access';
-        value: string | ThirdPartyAccess;
-      }
-    | {
-        relationTo: 'users';
-        value: string | User;
-      };
+  user: {
+    relationTo: 'users';
+    value: string | User;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -411,15 +343,10 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: string;
-  user:
-    | {
-        relationTo: 'third-party-access';
-        value: string | ThirdPartyAccess;
-      }
-    | {
-        relationTo: 'users';
-        value: string | User;
-      };
+  user: {
+    relationTo: 'users';
+    value: string | User;
+  };
   key?: string | null;
   value?:
     | {
@@ -522,31 +449,6 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "third-party-access_select".
- */
-export interface ThirdPartyAccessSelect<T extends boolean = true> {
-  updatedAt?: T;
-  createdAt?: T;
-  enableAPIKey?: T;
-  apiKey?: T;
-  apiKeyIndex?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "tools_select".
  */
 export interface ToolsSelect<T extends boolean = true> {
@@ -597,13 +499,6 @@ export interface UsersSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

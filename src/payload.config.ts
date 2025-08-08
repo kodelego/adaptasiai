@@ -52,8 +52,8 @@ export default buildConfig({
     }),
   ],
   email: nodemailerAdapter({
-    defaultFromAddress: 'noreply@adaptasiai.com',
-    defaultFromName: 'AdaptasiAI',
+    defaultFromAddress: process.env.EMAIL_FROM_ADDRESS!,
+    defaultFromName: process.env.EMAIL_FROM_NAME!,
     transportOptions: {
       host: process.env.EMAIL_HOST,
       port: process.env.EMAIL_PORT,
