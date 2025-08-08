@@ -6,6 +6,7 @@
 import { Agents } from './Agents.js'
 import { Companies } from './Companies.js'
 import { Documents } from './Documents.js'
+import { LogoAnimator } from './LogoAnimator.js'
 import { Media } from './Media.js'
 import { Tools } from './Tools.js'
 import { Users } from './Users.js'
@@ -15,10 +16,11 @@ export const collections = [
   Agents,
   Companies,
   Documents,
+  LogoAnimator,
   Media,
   Tools,
   Users,
 ]
 
 // Re-export individual collections for specific imports
-export { Agents, Companies, Documents, Media, Tools, Users }
+export { Agents, Companies, Documents, LogoAnimator, Media, Tools, Users }

@@ -10,6 +10,7 @@ import sharp from 'sharp'
 import { collections, Users } from '@/collections'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { Webhooks } from '@/globals/Webhooks'
+import { Webhooks as LogoAnimatorWebhooks } from '@/globals/LogoAnimatorWebhooks'
 import { s3Storage } from '@payloadcms/storage-s3'
 
 const filename = fileURLToPath(import.meta.url)
@@ -23,7 +24,7 @@ export default buildConfig({
     },
   },
   collections,
-  globals: [Webhooks],
+  globals: [Webhooks, LogoAnimatorWebhooks],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
