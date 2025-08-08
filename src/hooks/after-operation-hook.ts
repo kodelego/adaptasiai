@@ -32,7 +32,7 @@ export const buildCustomAfterOperationHook = (
   validationSchema: z.ZodObject,
 ): CollectionAfterOperationHook => {
   return async ({ req, operation, collection, result }) => {
-    if (!['create', 'delete', 'deleteByID', 'update', 'updateByID', 'findByID'].includes(operation)) return;
+    if (!['create', 'delete', 'deleteByID', 'update', 'updateByID'].includes(operation)) return;
     if (!validationSchema.safeParse(result).success) return;
     const global = await req.payload.findGlobal({
       slug: globalSlug,
