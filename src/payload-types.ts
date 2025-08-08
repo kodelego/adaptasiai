@@ -68,11 +68,12 @@ export interface Config {
   blocks: {};
   collections: {
     agents: Agent;
-    tools: Tool;
-    documents: Document;
-    users: User;
-    media: Media;
     companies: Company;
+    documents: Document;
+    'logo-animations': LogoAnimation;
+    media: Media;
+    tools: Tool;
+    users: User;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -80,11 +81,12 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     agents: AgentsSelect<false> | AgentsSelect<true>;
-    tools: ToolsSelect<false> | ToolsSelect<true>;
-    documents: DocumentsSelect<false> | DocumentsSelect<true>;
-    users: UsersSelect<false> | UsersSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
     companies: CompaniesSelect<false> | CompaniesSelect<true>;
+    documents: DocumentsSelect<false> | DocumentsSelect<true>;
+    'logo-animations': LogoAnimationsSelect<false> | LogoAnimationsSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    tools: ToolsSelect<false> | ToolsSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -94,9 +96,11 @@ export interface Config {
   };
   globals: {
     webhooks: Webhook;
+    'logo-animation-webhooks': LogoAnimationWebhook;
   };
   globalsSelect: {
     webhooks: WebhooksSelect<false> | WebhooksSelect<true>;
+    'logo-animation-webhooks': LogoAnimationWebhooksSelect<false> | LogoAnimationWebhooksSelect<true>;
   };
   locale: null;
   user: User & {
@@ -242,6 +246,34 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "companies".
+ */
+export interface Company {
+  id: string;
+  name: string;
+  slug: string;
+  domain?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logo-animations".
+ */
+export interface LogoAnimation {
+  id: string;
+  logo: string | Media;
+  creativeDirection: string;
+  dialog?: string | null;
+  aspectRatio: 'horizontal' | 'vertical';
+  videoModel: 'veo3' | 'veo3_fast';
+  videoPrompt?: string | null;
+  video?: (string | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -266,18 +298,6 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "companies".
- */
-export interface Company {
-  id: string;
-  name: string;
-  slug: string;
-  domain?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -288,24 +308,28 @@ export interface PayloadLockedDocument {
         value: string | Agent;
       } | null)
     | ({
-        relationTo: 'tools';
-        value: string | Tool;
+        relationTo: 'companies';
+        value: string | Company;
       } | null)
     | ({
         relationTo: 'documents';
         value: string | Document;
       } | null)
     | ({
-        relationTo: 'users';
-        value: string | User;
+        relationTo: 'logo-animations';
+        value: string | LogoAnimation;
       } | null)
     | ({
         relationTo: 'media';
         value: string | Media;
       } | null)
     | ({
-        relationTo: 'companies';
-        value: string | Company;
+        relationTo: 'tools';
+        value: string | Tool;
+      } | null)
+    | ({
+        relationTo: 'users';
+        value: string | User;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -364,6 +388,69 @@ export interface AgentsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "companies_select".
+ */
+export interface CompaniesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  domain?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents_select".
+ */
+export interface DocumentsSelect<T extends boolean = true> {
+  name?: T;
+  type?: T;
+  content?: T;
+  file?: T;
+  metadata?:
+    | T
+    | {
+        key?: T;
+        value?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logo-animations_select".
+ */
+export interface LogoAnimationsSelect<T extends boolean = true> {
+  logo?: T;
+  creativeDirection?: T;
+  dialog?: T;
+  aspectRatio?: T;
+  videoModel?: T;
+  videoPrompt?: T;
+  video?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "tools_select".
  */
 export interface ToolsSelect<T extends boolean = true> {
@@ -397,25 +484,6 @@ export interface ToolsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "documents_select".
- */
-export interface DocumentsSelect<T extends boolean = true> {
-  name?: T;
-  type?: T;
-  content?: T;
-  file?: T;
-  metadata?:
-    | T
-    | {
-        key?: T;
-        value?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
@@ -435,35 +503,6 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
- */
-export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "companies_select".
- */
-export interface CompaniesSelect<T extends boolean = true> {
-  name?: T;
-  slug?: T;
-  domain?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -514,6 +553,17 @@ export interface Webhook {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logo-animation-webhooks".
+ */
+export interface LogoAnimationWebhook {
+  id: string;
+  createPrompt?: string | null;
+  generateVideo?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "webhooks_select".
  */
 export interface WebhooksSelect<T extends boolean = true> {
@@ -523,6 +573,17 @@ export interface WebhooksSelect<T extends boolean = true> {
   media?: T;
   tools?: T;
   users?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logo-animation-webhooks_select".
+ */
+export interface LogoAnimationWebhooksSelect<T extends boolean = true> {
+  createPrompt?: T;
+  generateVideo?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

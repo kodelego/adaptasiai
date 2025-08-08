@@ -7,14 +7,10 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
-import { Users } from './collections/Users'
-import { Media } from './collections/Media'
-import { Agents } from '@/collections/Agents'
-import { Tools } from '@/collections/Tools'
-import { Documents } from '@/collections/Documents'
+import { collections, Users } from '@/collections'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
-import { Companies } from '@/collections/Companies'
 import { Webhooks } from '@/globals/Webhooks'
+import { Webhooks as LogoAnimatorWebhooks } from '@/globals/LogoAnimatorWebhooks'
 import { s3Storage } from '@payloadcms/storage-s3'
 
 const filename = fileURLToPath(import.meta.url)
@@ -27,8 +23,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Agents, Tools, Documents, Users, Media, Companies],
-  globals: [Webhooks],
+  collections,
+  globals: [Webhooks, LogoAnimatorWebhooks],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
